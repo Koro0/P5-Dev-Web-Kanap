@@ -14,9 +14,10 @@ fetch('http://localhost:3000/api/products')
 
 // function : affichage de tous les articles
 function shows(data) {
-  let a = document.createElement('a');
+  //let a = document.createElement('a');
   //Boucle pour passer sur tous les produits
   for (i = 0; i < data.length; i++) {
+    let a = document.createElement('a');
     //ajout attribut sur <a>
     a.href = 'product.html?id=' + data[i]._id;
 
@@ -35,7 +36,6 @@ function shows(data) {
     //affichage & Ordre d'affichage
     article.innerHTML = articleImg + articleName + articleDescrip;
     a.appendChild(article);
+    items.appendChild(a);
   }
-
-  items.appendChild(a);
 }
