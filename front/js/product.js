@@ -40,7 +40,7 @@ function showArticle(data) {
       articlePrice.innerHTML = data[i].price;
       articleDetail.innerHTML = data[i].description;
       let optionColors =
-        '<option value="">--SVP, choisissez une couleur --</option>';
+        '<option value="null">--SVP, choisissez une couleur --</option>';
       for (j = 0; j < data[i].colors.length; j++) {
         optionColors +=
           '<option value="' +
@@ -48,10 +48,59 @@ function showArticle(data) {
           '">' +
           data[i].colors[j] +
           '</option>';
-        //console.log(data[i].colors[j]);
-        //console.log(articleColor);
         articleColor.innerHTML = optionColors;
       }
+      let cart; //variable Panier
+      // event sur le button 'addToCart'
+      addCard.addEventListener(
+        'click',
+        function () {
+          let sameArticle = false; //booleant pour produit existant dans le localStorage
+          let articleQuantitySelected = articleQuantity.value; //quantité dans l'input
+          let articleColorSeleted =
+            articleColor.options[articleColor.selectedIndex].value; //la couleur choisie
+          //console.log(articleColorSeleted, articleQuantitySelected);
+
+          if (articleQuantitySelected <= 0 || articleColorSeleted == 'null') {
+            console.log("l'option ou la quantité non choisie");
+          } else {
+            //si le localStorage posséde deja du contenus
+            if (localStorage['productsInCart']) {
+              cart = JSON.parse(localStorage['productsInCart']);
+              //sinon creer un tableau
+            } else {
+              cart = [];
+              console.log(cart);
+            }
+            //passer en boucle dans le tableau panier('cart')
+            for (k = 0; k < cart.length; k++) {
+              // si cet article est deja present dans le panier et qui a les meme option
+              if (
+                cart[k].id == articleUrl.searchParams.get('id') &&
+                cart[k].option == articleColorSeleted
+              ) {
+                cart[k].quantity += parseInt(articleQuantitySelected);
+                console.log(
+                  parseInt(articleQuantitySelected),
+                  cart[k].quantity
+                );
+                sameArticle = true;
+              }
+            }
+            /*  Dans le condition où le boolean est "false"(produit non existent dans panier), 
+          on push le produit */
+            if (sameArticle == false) {
+              cart.push({
+                id: articleUrl.searchParams.get('id'),
+                quantity: parseInt(articleQuantitySelected),
+                option: articleColorSeleted,
+              });
+            }
+            localStorage.setItem('productsInCart', JSON.stringify(cart));
+          }
+        },
+        false
+      );
     }
   }
 }
