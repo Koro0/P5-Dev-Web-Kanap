@@ -2,6 +2,17 @@ let cart = JSON.parse(localStorage['productsInCart']);
 console.log(cart);
 let sectionCart = document.getElementById('cart__items');
 
+let totalQuantity = [];
+let showTotalQuantity = document.querySelector('#totalQuantity');
+function calcTotalQte() {
+  if (cart) {
+    cart.forEach((item) => totalQuantity.push(item.quantity));
+    //console.log(totalQuantity);
+    showTotalQuantity.textContent = eval(totalQuantity.join('+'));
+  }
+}
+calcTotalQte();
+
 for (i = 0; i < cart.length; i++) {
   let itemId = cart[i].id;
   //console.log(itemId);
@@ -10,7 +21,7 @@ for (i = 0; i < cart.length; i++) {
   let itemQuantity = cart[i].quantity;
   //console.log(itemQuantity);
 
-  ////////////////reque fetch selon l'item/////////////
+  ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
   //console.log(requete);
   fetch(requete)
@@ -123,7 +134,29 @@ for (i = 0; i < cart.length; i++) {
       cartItem.appendChild(cartItemContent);
 
       sectionCart.appendChild(cartItem);
+      /////////////////////////////////// End show items //////////////////////////////////
+      /*let itemForDelete = cart.find(
+        (item) => item.id == itemId && item.option == itemColor
+      );*/
+      //console.log(itemForDelete);
+
+      // cartItemContentSettingsDeleteUnder.addEventListener('click', deleteItem);
+
+      // function deleteItem() {
+      //   cart.splice(cart[i], 1);
+      //   console.log(cart);
+      // }
+
+      let totalPrice = [];
+      function calcTotalPrice() {
+        let price;
+        price = itemQuantity * data.price;
+        totalPrice.push(price);
+        console.log(totalPrice, price);
+      }
+      calcTotalPrice();
     })
+
     .catch((err) => {
       // Do something for an error here
       console.log(err);
