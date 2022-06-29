@@ -1,7 +1,7 @@
 let cart = JSON.parse(localStorage['productsInCart']);
 console.log(cart);
 let sectionCart = document.getElementById('cart__items');
-
+////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
 let showTotalQuantity = document.querySelector('#totalQuantity');
 function calcTotalQte() {
@@ -9,10 +9,18 @@ function calcTotalQte() {
     cart.forEach((item) => totalQuantity.push(item.quantity));
     //console.log(totalQuantity);
     showTotalQuantity.textContent = eval(totalQuantity.join('+'));
+  } else {
+    showTotalQuantity.textContent = 0;
   }
 }
 calcTotalQte();
+//////////////////////////// obj total price ////////////////////////////
 
+let totalPrice = document.getElementById('totalPrice');
+
+let price;
+let total = [];
+/////////////////////////////////////////////////////////////////////////
 for (i = 0; i < cart.length; i++) {
   let itemId = cart[i].id;
   //console.log(itemId);
@@ -135,26 +143,33 @@ for (i = 0; i < cart.length; i++) {
 
       sectionCart.appendChild(cartItem);
       /////////////////////////////////// End show items //////////////////////////////////
-      /*let itemForDelete = cart.find(
+      let itemForDelete = cart.find(
         (item) => item.id == itemId && item.option == itemColor
-      );*/
-      //console.log(itemForDelete);
+      );
+      console.log(itemForDelete);
 
-      // cartItemContentSettingsDeleteUnder.addEventListener('click', deleteItem);
+      cartItemContentSettingsDeleteUnder.addEventListener(
+        'click',
+        deleteItem(itemForDelete)
+      );
+      console.log(cart.indexOf(itemForDelete));
 
-      // function deleteItem() {
-      //   cart.splice(cart[i], 1);
-      //   console.log(cart);
-      // }
+      function deleteItem(item) {
+        //cart.splice(item, 1);
+        console.log(cart);
+      }
+      ////////////////// get amount to cal /////////////////////////////////
 
-      let totalPrice = [];
       function calcTotalPrice() {
-        let price;
         price = itemQuantity * data.price;
-        totalPrice.push(price);
-        console.log(totalPrice, price);
+        total.push(price);
+        //console.log(total, price);
+        totalPrice.textContent = eval(total.join('+'));
+        //console.log(total.join('+'));
       }
       calcTotalPrice();
+      //console.log(totalPrice.textContent);
+      /////////////////// end code /////////////////////////////////////////
     })
 
     .catch((err) => {
