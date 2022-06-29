@@ -24,13 +24,13 @@ function showArticle(data) {
      - la classe item__img pour la balise d'image produit;
      - Les id pour chaques balises
     */
-  let articleImage = document.querySelector('.item__img'); // recuperer le premier élément dans le document qui contient la classe
-  let articleName = document.getElementById('title');
-  let articlePrice = document.getElementById('price');
-  let articleDetail = document.getElementById('description');
-  let articleColor = document.getElementById('colors');
-  let articleQuantity = document.getElementById('quantity');
-  let addCard = document.getElementById('addToCart');
+  const articleImage = document.querySelector('.item__img'); // recuperer le premier élément dans le document qui contient la classe
+  const articleName = document.getElementById('title');
+  const articlePrice = document.getElementById('price');
+  const articleDetail = document.getElementById('description');
+  const articleColor = document.getElementById('colors');
+  const articleQuantity = document.getElementById('quantity');
+  const addCard = document.getElementById('addToCart');
 
   for (i = 0; i < data.length; i++) {
     if (articleId === data[i]._id) {
