@@ -1,9 +1,9 @@
 let cart = JSON.parse(localStorage['productsInCart']);
 console.log(cart);
-let sectionCart = document.getElementById('cart__items');
+const sectionCart = document.getElementById('cart__items');
 ////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
-let showTotalQuantity = document.querySelector('#totalQuantity');
+const showTotalQuantity = document.querySelector('#totalQuantity');
 function calcTotalQte() {
   if (cart) {
     cart.forEach((item) => totalQuantity.push(item.quantity));
@@ -16,7 +16,7 @@ function calcTotalQte() {
 calcTotalQte();
 //////////////////////////// obj total price ////////////////////////////
 
-let totalPrice = document.getElementById('totalPrice');
+const totalPrice = document.getElementById('totalPrice');
 
 let price;
 let total = [];
@@ -28,7 +28,7 @@ for (i = 0; i < cart.length; i++) {
   //console.log(itemColor);
   let itemQuantity = cart[i].quantity;
   //console.log(itemQuantity);
-
+  const temp = i;
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
   //console.log(requete);
@@ -39,12 +39,12 @@ for (i = 0; i < cart.length; i++) {
     .then((data) => {
       // Work with JSON data here
       ///////////////////////////// img ///////////////////////////////////////////////////
-      let cartItemImgUnder = document.createElement('img');
+      const cartItemImgUnder = document.createElement('img');
       cartItemImgUnder.src = data.imageUrl;
       cartItemImgUnder.alt = data.altTxt;
       //console.log(cartItemImgUnder);
 
-      let cartItemImg = document.createElement('div');
+      const cartItemImg = document.createElement('div');
       cartItemImg.className = 'cart__item__img';
       //console.log(cartItemImg);
 
@@ -54,19 +54,19 @@ for (i = 0; i < cart.length; i++) {
 
       /////////////////////////// Item Content Decriptions ////////////////////////////
 
-      let cartItemName = document.createElement('h2');
+      const cartItemName = document.createElement('h2');
       cartItemName.textContent = data.name;
       //console.log(cartItemName);
 
-      let cartItemColor = document.createElement('p');
+      const cartItemColor = document.createElement('p');
       cartItemColor.textContent = itemColor;
       //console.log(cartItemColor);
 
-      let cartItemPrice = document.createElement('p');
+      const cartItemPrice = document.createElement('p');
       cartItemPrice.textContent = data.price + ' €';
       //console.log(cartItemPrice);
 
-      let cartItemContentDescription = document.createElement('div');
+      const cartItemContentDescription = document.createElement('div');
       cartItemContentDescription.className = 'cart__item__content__description';
       //console.log(cartItemContentDescription);
 
@@ -77,11 +77,11 @@ for (i = 0; i < cart.length; i++) {
 
       //////////////////////////// Item Content Settings_Quantity ////////////////////
 
-      let cartItemContentSettingsQuantityUnder = document.createElement('p');
+      const cartItemContentSettingsQuantityUnder = document.createElement('p');
       cartItemContentSettingsQuantityUnder.textContent = 'Qté : ';
       //console.log(cartItemContentSettingsQuantityUnder);
 
-      let cartItemContentSettingsQuantityInput =
+      const cartItemContentSettingsQuantityInput =
         document.createElement('input');
       cartItemContentSettingsQuantityInput.type = 'number';
       cartItemContentSettingsQuantityInput.className = 'itemQuantity';
@@ -91,7 +91,7 @@ for (i = 0; i < cart.length; i++) {
       cartItemContentSettingsQuantityInput.value = itemQuantity;
       //console.log(cartItemContentSettingsQuantityInput);
 
-      let cartItemContentSettingsQuantity = document.createElement('div');
+      const cartItemContentSettingsQuantity = document.createElement('div');
       cartItemContentSettingsQuantity.className =
         'cart__item__content__settings__quantity';
 
@@ -104,12 +104,12 @@ for (i = 0; i < cart.length; i++) {
 
       //////////////////////////// Item Content Settings_Delete ///////////////////////
 
-      let cartItemContentSettingsDeleteUnder = document.createElement('p');
+      const cartItemContentSettingsDeleteUnder = document.createElement('p');
       cartItemContentSettingsDeleteUnder.className = 'deleteItem';
       cartItemContentSettingsDeleteUnder.textContent = 'Supprimer';
       //console.log(cartItemContentSettingsDeleteUnder);
 
-      let cartItemContentSettingsDelete = document.createElement('div');
+      const cartItemContentSettingsDelete = document.createElement('div');
       cartItemContentSettingsDelete.className =
         'cart__item__content__settings__delete';
 
@@ -118,21 +118,21 @@ for (i = 0; i < cart.length; i++) {
       );
       ///////////////////////////////////////////////////////////////////////////////////
 
-      let cartItemContentSettings = document.createElement('div');
+      const cartItemContentSettings = document.createElement('div');
       cartItemContentSettings.className = 'cart__item__content__settings';
       //console.log(cartItemContentSettings);
 
       cartItemContentSettings.appendChild(cartItemContentSettingsQuantity);
       cartItemContentSettings.appendChild(cartItemContentSettingsDelete);
 
-      let cartItemContent = document.createElement('div');
+      const cartItemContent = document.createElement('div');
       cartItemContent.className = 'cart__item__content';
       //console.log(cartItemContent);
 
       cartItemContent.appendChild(cartItemContentDescription);
       cartItemContent.appendChild(cartItemContentSettings);
 
-      let cartItem = document.createElement('article');
+      const cartItem = document.createElement('article');
       cartItem.className = 'cart__item';
       cartItem.dataset.id = itemId;
       cartItem.dataset.color = itemColor;
@@ -143,7 +143,8 @@ for (i = 0; i < cart.length; i++) {
 
       sectionCart.appendChild(cartItem);
       /////////////////////////////////// End show items //////////////////////////////////
-      let itemForDelete = cart.find(
+      /////////////////////////////////// function delete item ///////////////////////////
+      /*let itemForDelete = cart.find(
         (item) => item.id == itemId && item.option == itemColor
       );
       console.log(itemForDelete);
@@ -157,6 +158,23 @@ for (i = 0; i < cart.length; i++) {
       function deleteItem(item) {
         //cart.splice(item, 1);
         console.log(cart);
+      }
+      */
+      /////////////////// function modify count for items /////////////////////
+      cartItemContentSettingsQuantityInput.addEventListener(
+        'change',
+        updateQuantity
+      );
+      function updateQuantity() {
+        let initialValue = itemQuantity;
+        if (cartItemContentSettingsQuantityInput.value >= 1) {
+          cart.splice(temp, 1, {
+            id: itemId,
+            quantity: cartItemContentSettingsQuantityInput.value,
+            option: itemColor,
+          });
+          console.log(cart);
+        }
       }
       ////////////////// get amount to cal /////////////////////////////////
 
@@ -176,4 +194,12 @@ for (i = 0; i < cart.length; i++) {
       // Do something for an error here
       console.log(err);
     });
+}
+////////////////////////////////////////////// verification input information ///////////////////////////////////
+function controlForm() {
+  let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
+  let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
+  let addressErrorMsg = document.getElementById('addressErrorMsg');
+  let cityErrorMsg = document.getElementById('cityErrorMsg');
+  let emailErrorMsg = document.getElementById('emailErrorMsg');
 }
