@@ -28,9 +28,9 @@ function showArticle(data) {
   const articleName = document.getElementById('title');
   const articlePrice = document.getElementById('price');
   const articleDetail = document.getElementById('description');
-  const articleColor = document.getElementById('colors');
-  const articleQuantity = document.getElementById('quantity');
-  const addCard = document.getElementById('addToCart');
+  let articleColor = document.getElementById('colors');
+  let articleQuantity = document.getElementById('quantity');
+  let addCard = document.getElementById('addToCart');
 
   for (i = 0; i < data.length; i++) {
     if (articleId === data[i]._id) {
@@ -59,10 +59,11 @@ function showArticle(data) {
           let articleQuantitySelected = articleQuantity.value; //quantité dans l'input
           let articleColorSeleted =
             articleColor.options[articleColor.selectedIndex].value; //la couleur choisie
-          //console.log(articleColorSeleted, articleQuantitySelected);
+          console.log(articleColorSeleted, articleQuantitySelected);
 
           if (articleQuantitySelected <= 0 || articleColorSeleted == 'null') {
             console.log("l'option ou la quantité non choisie");
+            alert('choisissez la couleur et la quantité');
           } else {
             //si le localStorage posséde deja du contenus
             if (localStorage['productsInCart']) {
@@ -97,6 +98,8 @@ function showArticle(data) {
               });
             }
             localStorage.setItem('productsInCart', JSON.stringify(cart));
+            alert('Produit ajouté dans le panier');
+            document.location.reload();
           }
         },
         false

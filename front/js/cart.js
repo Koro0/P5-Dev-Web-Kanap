@@ -144,29 +144,25 @@ for (i = 0; i < cart.length; i++) {
       sectionCart.appendChild(cartItem);
       /////////////////////////////////// End show items //////////////////////////////////
       /////////////////////////////////// function delete item ///////////////////////////
-      /*let itemForDelete = cart.find(
-        (item) => item.id == itemId && item.option == itemColor
-      );
-      console.log(itemForDelete);
 
-      cartItemContentSettingsDeleteUnder.addEventListener(
-        'click',
-        deleteItem(itemForDelete)
-      );
-      console.log(cart.indexOf(itemForDelete));
+      cartItemContentSettingsDeleteUnder.addEventListener('click', deleteItem);
 
-      function deleteItem(item) {
-        //cart.splice(item, 1);
+      function deleteItem() {
+        cart.splice(temp, 1);
+        updateLocalStorage();
         console.log(cart);
       }
-      */
+      function updateLocalStorage() {
+        localStorage.clear();
+        localStorage.setItem('productsInCart', JSON.stringify(cart));
+        document.location.reload(); // actualiser la page
+      }
       /////////////////// function modify count for items /////////////////////
       cartItemContentSettingsQuantityInput.addEventListener(
         'change',
         updateQuantity
       );
       function updateQuantity() {
-        let initialValue = itemQuantity;
         if (cartItemContentSettingsQuantityInput.value >= 1) {
           cart.splice(temp, 1, {
             id: itemId,
@@ -175,6 +171,7 @@ for (i = 0; i < cart.length; i++) {
           });
           console.log(cart);
         }
+        updateLocalStorage();
       }
       ////////////////// get amount to cal /////////////////////////////////
 
@@ -187,8 +184,8 @@ for (i = 0; i < cart.length; i++) {
       }
       calcTotalPrice();
       //console.log(totalPrice.textContent);
-      /////////////////// end code /////////////////////////////////////////
     })
+    /////////////////// end code /////////////////////////////////////////
 
     .catch((err) => {
       // Do something for an error here
@@ -196,6 +193,10 @@ for (i = 0; i < cart.length; i++) {
     });
 }
 ////////////////////////////////////////////// verification input information ///////////////////////////////////
+let Regex = /^[A-Z]{1}[a-z]{20}$/;
+let RegexAdress = /^[0-9]{1-4}[a-z-A-Z]{30}$/;
+let RegexEmail =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 function controlForm() {
   let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
   let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
