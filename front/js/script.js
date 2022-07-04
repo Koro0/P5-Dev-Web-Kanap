@@ -25,16 +25,25 @@ function shows(data) {
 
     let article = document.createElement('article');
     //Variable pour code Image
-    let articleImg =
-      '<img src="' + data[i].imageUrl + '" alt="' + data[i].description + '">';
+    let articleImg = document.createElement('img');
+    articleImg.src = data[i].imageUrl;
+    console.log(articleImg);
+    article.appendChild(articleImg);
+
     //Variable pour code Nom
-    let articleName = '<h3 class="productName">' + data[i].name + '</h3>';
+    let articleName = document.createElement('h3');
+    articleName.className = 'productName';
+    articleName.textContent = data[i].name;
+    article.appendChild(articleName);
+
     //Variable pour code description du produit
-    let articleDescrip =
-      '<p class="productDescription">' + data[i].description + '</p>'; //Descriptions des articles
+    let articleDescrip = document.createElement('p');
+    articleDescrip.className = 'productDescription';
+    articleDescrip.textContent = data[i].description;
+    article.appendChild(articleDescrip);
 
     //affichage & Ordre d'affichage
-    article.innerHTML = articleImg + articleName + articleDescrip;
+
     a.appendChild(article);
     items.appendChild(a);
   }
