@@ -193,14 +193,159 @@ for (i = 0; i < cart.length; i++) {
     });
 }
 ////////////////////////////////////////////// verification input information ///////////////////////////////////
-let Regex = /^[A-Z]{1}[a-z]{20}$/;
-let RegexAdress = /^[0-9]{1-4}[a-z-A-Z]{30}$/;
-let RegexEmail =
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-function controlForm() {
-  let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
-  let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-  let addressErrorMsg = document.getElementById('addressErrorMsg');
-  let cityErrorMsg = document.getElementById('cityErrorMsg');
-  let emailErrorMsg = document.getElementById('emailErrorMsg');
+let Regex = /^[A-Z-a-z-\s]{2,10}$/;
+/* une ensemble de lettre majuscule et miniscule peuvent etre espacer qui a une longuer de 2 à 10 lettre
+ */
+let RegexAdress = /^[0-9\s]{2,5}[a-z-A-Z\s]{5,25}$/;
+/*  une ensemble de chiffre espacer avec des mot et des espaces
+ */
+let RegexEmail = /^([a-zA-Z0-9.]+@([a-zA-Z0-9]+\.)+([a-zA-Z]{2,5}))$/;
+
+///////////////////////////recuperer les Inputs ///////////////////////////////////////////////////////////////
+const firstName = document.getElementById('firstName');
+const lastName = document.getElementById('lastName');
+const address = document.getElementById('address');
+const city = document.getElementById('city');
+const email = document.getElementById('email');
+const validateButton = document.getElementById('order');
+//////////////////////////// Message d'erreur ////////////////////////////////////
+let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
+let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
+let addressErrorMsg = document.getElementById('addressErrorMsg');
+let cityErrorMsg = document.getElementById('cityErrorMsg');
+let emailErrorMsg = document.getElementById('emailErrorMsg');
+/////////////////////////// Booléon de Verification /////////////////////////////////
+let firstNameValided = false;
+let lastNameValided = false;
+let addressValided = false;
+let cityValided = false;
+let emailValided = false;
+////////////////////////// function de verification des inputs saisie ///////////////////////
+function ValidatefirstName() {
+  if (firstName.value.match(Regex)) {
+    console.log('saisie Nom correct : ' + firstName.value);
+    firstNameValided = true;
+    firstNameErrorMsg.textContent = '';
+  } else {
+    console.log('saisie Nom erroné : ' + firstName.value);
+    firstNameErrorMsg.textContent =
+      'Saisissez correctement votre Nom (seulement les lettre sont autoriser) ';
+    firstNameValided = false;
+  }
+  console.log(firstNameValided);
+}
+
+function validateLastname() {
+  if (lastName.value.match(Regex)) {
+    console.log('saisie Prenom correct : ' + lastName.value);
+    lastNameErrorMsg.textContent = '';
+    lastNameValided = true;
+  } else {
+    console.log('saisie Prenom erroné : ' + lastName.value);
+    lastNameErrorMsg.textContent =
+      'Saisissez correctement votre Nom (seulement les lettre sont autoriser)';
+    lastNameValided = false;
+  }
+  console.log(lastNameValided);
+}
+
+function valiadateAdress() {
+  if (address.value.match(RegexAdress)) {
+    console.log('saisie Adresse correct : ' + address.value);
+    addressValided.textContent = ' ';
+    addressValided = true;
+  } else {
+    console.log('saisie Adresse erroné ' + address.value);
+    addressErrorMsg.textContent = 'Remplir une adresse correcte';
+    addressValided = false;
+  }
+  console.log(addressValided);
+}
+
+function validationCity() {
+  if (city.value.match(Regex)) {
+    console.log('saisie Ville correct : ' + city.value);
+    cityErrorMsg = '';
+    cityValided = true;
+  } else {
+    console.log('saisie Ville erroné ' + city.value);
+    cityErrorMsg = 'Remplissez vote Ville';
+    cityValided = false;
+  }
+  console.log(cityValided);
+}
+function valiadateEmail() {
+  if (email.value.match(RegexEmail)) {
+    console.log('saisie email correct : ' + email.value);
+    emailErrorMsg = '';
+    emailValided = true;
+  } else {
+    console.log('saisie email erroné ' + email.value);
+    emailErrorMsg = 'un email valide est exiger !';
+    emailValided = false;
+  }
+  console.log(emailValided);
+}
+firstName.addEventListener('change', ValidatefirstName);
+lastName.addEventListener('change', validateLastname);
+address.addEventListener('change', valiadateAdress);
+city.addEventListener('change', validationCity);
+email.addEventListener('change', valiadateEmail);
+
+validateButton.type = '';
+validateButton.addEventListener('click', validateForm);
+
+////////////////////////////////// validation Form ////////////////////////////
+let contact = [];
+let products = [];
+
+function validateForm() {
+  if (
+    firstNameValided == true &&
+    lastNameValided == true &&
+    addressValided == true &&
+    cityValided == true &&
+    emailValided == true
+  ) {
+    for (i = 0; i < cart.length; i++) {
+      products.push(cart[i].id);
+    }
+    contact = [
+      {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        adress: address.value,
+        city: city.value,
+        email: email.value,
+      },
+    ];
+  } else {
+    console.log('error form');
+  }
+  send();
+  console.log(contact, products);
+  products = [];
+}
+//console.log(Object.keys(cart));
+///////////////////////////// envoie Post /////////////////////////////////////
+
+function send(e) {
+  //e.preventDefault();
+  fetch('http://localhost:3000/api/products/order', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ products, contact }),
+  })
+    .then(function (res) {
+      if (res.ok) {
+        console.log(res.json());
+        return res.json();
+      }
+    })
+    .then(function () {
+      //window.location.replace('http://localhost:3000/api/products/order');
+    });
 }
