@@ -226,7 +226,7 @@ function ValidatefirstName() {
   if (firstName.value.match(Regex)) {
     console.log('saisie Nom correct : ' + firstName.value);
     firstNameValided = true;
-    firstNameErrorMsg.textContent = '';
+    firstNameErrorMsg.textContent = ' ';
   } else {
     console.log('saisie Nom erroné : ' + firstName.value);
     firstNameErrorMsg.textContent =
@@ -239,7 +239,7 @@ function ValidatefirstName() {
 function validateLastname() {
   if (lastName.value.match(Regex)) {
     console.log('saisie Prenom correct : ' + lastName.value);
-    lastNameErrorMsg.textContent = '';
+    lastNameErrorMsg.textContent = ' ';
     lastNameValided = true;
   } else {
     console.log('saisie Prenom erroné : ' + lastName.value);
@@ -266,7 +266,7 @@ function valiadateAdress() {
 function validationCity() {
   if (city.value.match(Regex)) {
     console.log('saisie Ville correct : ' + city.value);
-    cityErrorMsg = '';
+    cityErrorMsg = ' ';
     cityValided = true;
   } else {
     console.log('saisie Ville erroné ' + city.value);
@@ -278,7 +278,7 @@ function validationCity() {
 function valiadateEmail() {
   if (email.value.match(RegexEmail)) {
     console.log('saisie email correct : ' + email.value);
-    emailErrorMsg = '';
+    emailErrorMsg = ' ';
     emailValided = true;
   } else {
     console.log('saisie email erroné ' + email.value);
@@ -321,7 +321,7 @@ function validateForm() {
   } else {
     console.log('error form');
   }
-  send().then();
+  send();
   console.log(contact, products);
   products = [];
 }
@@ -339,15 +339,18 @@ function send() {
     body: JSON.stringify({ products, contact }),
   })
     .then(function (res) {
+      console.log(res);
       if (res.ok) {
-        console.log(res.json());
         return res.json();
       }
     })
     .then(function (value) {
-      localStorage.setItem('orderId', JSON.stringify(value.orderId));
-      console.log(localStorage, value.orderId);
-      window.location.replace('../confirmation.html?' + value.orderId);
+      console.log(value.orderId);
+      window.location.href =
+        window.location.origin +
+        '/front/html/confirmation.html?orderId=' +
+        value.orderId;
       return value;
     });
+  return;
 }
