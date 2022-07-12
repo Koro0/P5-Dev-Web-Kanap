@@ -1,5 +1,6 @@
 let cart = JSON.parse(localStorage['productsInCart']);
 console.log(cart);
+const URLPage = new URL(window.location.href);
 const sectionCart = document.getElementById('cart__items');
 ////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
@@ -310,26 +311,24 @@ function validateForm() {
     for (i = 0; i < cart.length; i++) {
       products.push(cart[i].id);
     }
-    contact = [
-      {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        adress: address.value,
-        city: city.value,
-        email: email.value,
-      },
-    ];
+    contact = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    };
   } else {
     console.log('error form');
   }
-  send();
+  send().then();
   console.log(contact, products);
   products = [];
 }
 //console.log(Object.keys(cart));
 ///////////////////////////// envoie Post /////////////////////////////////////
 
-function send(e) {
+function send() {
   //e.preventDefault();
   fetch('http://localhost:3000/api/products/order', {
     method: 'POST',
@@ -345,7 +344,10 @@ function send(e) {
         return res.json();
       }
     })
-    .then(function () {
-      //window.location.replace('http://localhost:3000/api/products/order');
+    .then(function (value) {
+      localStorage.setItem('orderId', JSON.stringify(value.orderId));
+      console.log(localStorage, value.orderId);
+      window.location.replace('../confirmation.html?' + value.orderId);
+      return value;
     });
 }
