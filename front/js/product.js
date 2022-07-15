@@ -34,11 +34,15 @@ function showArticle(data) {
 
   for (i = 0; i < data.length; i++) {
     if (articleId === data[i]._id) {
-      articleImage.innerHTML =
-        '<img src="' + data[i].imageUrl + '" alt="' + data[i].altTxt + '">';
+      //////////// img item /////////////////////////////
+      let item__img = document.createElement('img');
+      item__img.src = data[i].imageUrl;
+      item__img.alt = data[i].altTxt;
+      articleImage.appendChild(item__img);
+      articleDetail.innerHTML = data[i].description;
+      /////////// Name + price /////////////////////////////////
       articleName.innerHTML = data[i].name;
       articlePrice.innerHTML = data[i].price;
-      articleDetail.innerHTML = data[i].description;
       let optionColors =
         '<option value="null">--SVP, choisissez une couleur --</option>';
       for (j = 0; j < data[i].colors.length; j++) {

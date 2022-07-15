@@ -325,7 +325,7 @@ function validateForm() {
   console.log(contact, products);
   products = [];
 }
-//console.log(Object.keys(cart));
+
 ///////////////////////////// envoie Post /////////////////////////////////////
 
 function send() {
@@ -345,11 +345,11 @@ function send() {
       }
     })
     .then(function (value) {
-      console.log(value.orderId);
       window.location.href =
         window.location.origin +
         '/front/html/confirmation.html?orderId=' +
         value.orderId;
+      /* lien URL + /front/html/confirmation.html?orderId= + orderId */
       return value;
     });
   return;
