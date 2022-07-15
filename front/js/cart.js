@@ -1,6 +1,6 @@
 let cart = JSON.parse(localStorage['productsInCart']);
 console.log(cart);
-const URLPage = new URL(window.location.href);
+
 const sectionCart = document.getElementById('cart__items');
 ////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
@@ -19,7 +19,7 @@ calcTotalQte();
 
 const totalPrice = document.getElementById('totalPrice');
 
-let price;
+let price; //Qte + price item
 let total = [];
 /////////////////////////////////////////////////////////////////////////
 for (i = 0; i < cart.length; i++) {
@@ -253,7 +253,7 @@ function validateLastname() {
 function valiadateAdress() {
   if (address.value.match(RegexAdress)) {
     console.log('saisie Adresse correct : ' + address.value);
-    addressValided.textContent = ' ';
+    addressErrorMsg.textContent = ' ';
     addressValided = true;
   } else {
     console.log('saisie Adresse erroné ' + address.value);
@@ -266,11 +266,11 @@ function valiadateAdress() {
 function validationCity() {
   if (city.value.match(Regex)) {
     console.log('saisie Ville correct : ' + city.value);
-    cityErrorMsg = ' ';
+    cityErrorMsg.textContent = ' ';
     cityValided = true;
   } else {
     console.log('saisie Ville erroné ' + city.value);
-    cityErrorMsg = 'Remplissez vote Ville';
+    cityErrorMsg.textContent = 'Remplissez vote Ville';
     cityValided = false;
   }
   console.log(cityValided);
@@ -278,11 +278,11 @@ function validationCity() {
 function valiadateEmail() {
   if (email.value.match(RegexEmail)) {
     console.log('saisie email correct : ' + email.value);
-    emailErrorMsg = ' ';
+    emailErrorMsg.textContent = ' ';
     emailValided = true;
   } else {
     console.log('saisie email erroné ' + email.value);
-    emailErrorMsg = 'un email valide est exiger !';
+    emailErrorMsg.textContent = 'un email valide est exiger !';
     emailValided = false;
   }
   console.log(emailValided);
@@ -350,6 +350,7 @@ function send() {
         '/front/html/confirmation.html?orderId=' +
         value.orderId;
       /* lien URL + /front/html/confirmation.html?orderId= + orderId */
+      //localStorage.clear();
       return value;
     });
   return;

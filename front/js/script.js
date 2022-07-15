@@ -9,7 +9,7 @@ fetch('http://localhost:3000/api/products')
   })
   .catch((err) => {
     // Do something for an error here
-    console.log(err);
+    console.log('erreur du server ', err);
   });
 
 // function : affichage de tous les articles
