@@ -29,6 +29,7 @@ for (i = 0; i < cart.length; i++) {
   //console.log(itemColor);
   let itemQuantity = cart[i].quantity;
   //console.log(itemQuantity);
+  ////// constante i pour recuperer l'item pour la function deleteItem ////////////////
   const temp = i;
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
@@ -329,7 +330,6 @@ function validateForm() {
 ///////////////////////////// envoie Post /////////////////////////////////////
 
 function send() {
-  //e.preventDefault();
   fetch('http://localhost:3000/api/products/order', {
     method: 'POST',
     headers: {
