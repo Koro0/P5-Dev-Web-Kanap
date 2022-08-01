@@ -57,7 +57,7 @@ function addItemInCart() {
   let articleQuantitySelected = articleQuantity.value; //quantité dans l'input
   let articleColorSeleted =
     articleColor.options[articleColor.selectedIndex].value; //la couleur choisie
-  //console.log(articleColorSeleted, articleQuantitySelected);
+  console.log(articleColorSeleted, articleQuantitySelected);
 
   if (articleQuantitySelected <= 0 || articleColorSeleted == 'null') {
     console.log("l'option ou la quantité non choisie");
@@ -91,8 +91,13 @@ function addItemInCart() {
     }
     localStorage.setItem('productsInCart', JSON.stringify(cart));
     alert('Produit ajouté dans le panier');
-    document.location.reload();
+    resetOption();
   }
+}
+
+function resetOption() {
+  articleColor.value = '';
+  articleQuantity.value = 0;
 }
 
 //////// event clique addItemInCart sur le button 'addToCart' ////////////
