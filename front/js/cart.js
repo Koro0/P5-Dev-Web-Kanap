@@ -157,7 +157,7 @@ for (i = 0; i < cart.length; i++) {
       function updateLocalStorage() {
         localStorage.clear();
         localStorage.setItem('productsInCart', JSON.stringify(cart));
-        document.location.reload(); // actualiser la page
+        document.location.reload();
       }
       /////////////////// function modify count for items /////////////////////
       cartItemContentSettingsQuantityInput.addEventListener(
@@ -172,8 +172,16 @@ for (i = 0; i < cart.length; i++) {
             option: itemColor,
           });
           console.log(cart);
+        } else if (cartItemContentSettingsQuantityInput.value <= 0) {
+          cart.splice(temp, 1, {
+            id: itemId,
+            quantity: 1,
+            option: itemColor,
+          });
+          cartItemContentSettingsQuantityInput.value = 1;
+          console.log(cart);
+          updateLocalStorage();
         }
-        updateLocalStorage();
       }
       ////////////////// get amount to cal /////////////////////////////////
 
@@ -194,6 +202,7 @@ for (i = 0; i < cart.length; i++) {
       console.log(err);
     });
 }
+
 ////////////////////////////////////////////// verification input information ///////////////////////////////////
 let Regex = /^[A-Z-a-z-\s]{2,10}$/;
 /* une ensemble de lettre majuscule et miniscule peuvent etre espacer qui a une longuer de 2 à 10 lettre
@@ -209,7 +218,8 @@ const lastName = document.getElementById('lastName');
 const address = document.getElementById('address');
 const city = document.getElementById('city');
 const email = document.getElementById('email');
-const validateButton = document.getElementById('order');
+const valideCommande = document.getElementById('order');
+
 //////////////////////////// Message d'erreur ////////////////////////////////////
 let firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
 let lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
@@ -294,8 +304,7 @@ address.addEventListener('change', valiadateAdress);
 city.addEventListener('change', validationCity);
 email.addEventListener('change', valiadateEmail);
 
-validateButton.type = '';
-validateButton.addEventListener('click', validateForm);
+valideCommande.addEventListener('click', validateForm);
 
 ////////////////////////////////// validation Form ////////////////////////////
 let contact = [];
