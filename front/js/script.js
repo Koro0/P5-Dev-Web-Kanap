@@ -9,10 +9,11 @@ fetch('http://localhost:3000/api/products')
   })
   .catch((err) => {
     // Do something for an error here
-    console.log('erreur du server ', err);
+    console.error('erreur du server ', err);
   });
 
 // function : affichage de tous les articles
+
 function shows(data) {
   //let a = document.createElement('a');
   //Boucle pour passer sur tous les produits
@@ -21,7 +22,7 @@ function shows(data) {
     //ajout attribut sur <a>
     a.href = 'product.html?id=' + data[i]._id;
 
-    console.log(a);
+    //console.log(a);
 
     let article = document.createElement('article');
     //Variable pour code Image

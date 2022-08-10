@@ -18,9 +18,8 @@ calcTotalQte();
 //////////////////////////// obj total price ////////////////////////////
 
 const totalPrice = document.getElementById('totalPrice');
+let total;
 
-let price; //Qte + price item
-let total = [];
 /////////////////////////////////////////////////////////////////////////
 for (i = 0; i < cart.length; i++) {
   let itemId = cart[i].id;
@@ -31,6 +30,7 @@ for (i = 0; i < cart.length; i++) {
   //console.log(itemQuantity);
   ////// constante i pour recuperer l'item pour la function deleteItem ////////////////
   const temp = i;
+  let cartPrice = [];
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
   //console.log(requete);
@@ -145,19 +145,30 @@ for (i = 0; i < cart.length; i++) {
 
       sectionCart.appendChild(cartItem);
       /////////////////////////////////// End show items //////////////////////////////////
+      let price; //Qte * price item
+      let totalItem = [];
+
       /////////////////////////////////// function delete item ///////////////////////////
 
       cartItemContentSettingsDeleteUnder.addEventListener('click', deleteItem);
 
       function deleteItem() {
+        itemToDelete = document.querySelector(
+          `[data-id="${cart[temp].id}"][data-color="${cart[temp].option}"]`
+        );
         cart.splice(temp, 1);
         updateLocalStorage();
-        console.log(cart);
+
+        calcTotalPrice();
+
+        itemToDelete.remove();
+        totalQuantity = [];
+
+        calcTotalQte();
       }
       function updateLocalStorage() {
         localStorage.clear();
         localStorage.setItem('productsInCart', JSON.stringify(cart));
-        document.location.reload();
       }
       /////////////////// function modify count for items /////////////////////
       cartItemContentSettingsQuantityInput.addEventListener(
@@ -171,7 +182,7 @@ for (i = 0; i < cart.length; i++) {
             quantity: cartItemContentSettingsQuantityInput.value,
             option: itemColor,
           });
-          console.log(cart);
+          // console.log(cart);
         } else if (cartItemContentSettingsQuantityInput.value <= 0) {
           cart.splice(temp, 1, {
             id: itemId,
@@ -179,27 +190,35 @@ for (i = 0; i < cart.length; i++) {
             option: itemColor,
           });
           cartItemContentSettingsQuantityInput.value = 1;
-          console.log(cart);
-          updateLocalStorage();
+          //console.log(cart);
         }
+        totalQuantity = [];
+        totalItem = [];
+        calcTotalQte();
+        updateLocalStorage();
+        calcTotalPrice();
       }
       ////////////////// get amount to cal /////////////////////////////////
 
       function calcTotalPrice() {
+        let QtePerItem = itemQuantity;
         price = itemQuantity * data.price;
-        total.push(price);
-        //console.log(total, price);
-        totalPrice.textContent = eval(total.join('+'));
-        //console.log(total.join('+'));
+        cart.forEach((item) => totalItem.push(item.quantity * data.price));
+        //totalItem.push(price);
+        total = totalItem.reduce(
+          (previousValue, currentValue) => previousValue + currentValue
+        );
+        totalPrice.textContent = total;
       }
       calcTotalPrice();
       //console.log(totalPrice.textContent);
     })
+
     /////////////////// end code /////////////////////////////////////////
 
     .catch((err) => {
       // Do something for an error here
-      console.log(err);
+      console.error(err);
     });
 }
 
