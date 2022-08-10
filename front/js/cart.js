@@ -201,12 +201,12 @@ for (i = 0; i < cart.length; i++) {
       ////////////////// get amount to cal /////////////////////////////////
 
       function calcTotalPrice() {
-        let QtePerItem = itemQuantity;
         price = itemQuantity * data.price;
         cart.forEach((item) => totalItem.push(item.quantity * data.price));
         //totalItem.push(price);
         total = totalItem.reduce(
-          (previousValue, currentValue) => previousValue + currentValue
+          (previousValue, currentValue) => previousValue + currentValue,
+          0
         );
         totalPrice.textContent = total;
       }

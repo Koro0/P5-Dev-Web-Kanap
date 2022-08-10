@@ -4,7 +4,7 @@ fetch('http://localhost:3000/api/products')
   })
   .then((data) => {
     // Work with JSON data here
-    console.log(data);
+
     shows(data);
   })
   .catch((err) => {
@@ -28,7 +28,7 @@ function shows(data) {
     //Variable pour code Image
     let articleImg = document.createElement('img');
     articleImg.src = data[i].imageUrl;
-    console.log(articleImg);
+    //console.log(articleImg);
     article.appendChild(articleImg);
 
     //Variable pour code Nom
