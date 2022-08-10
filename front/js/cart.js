@@ -30,7 +30,6 @@ for (i = 0; i < cart.length; i++) {
   //console.log(itemQuantity);
   ////// constante i pour recuperer l'item pour la function deleteItem ////////////////
   const temp = i;
-  let cartPrice = [];
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
   //console.log(requete);
@@ -159,12 +158,12 @@ for (i = 0; i < cart.length; i++) {
         cart.splice(temp, 1);
         updateLocalStorage();
 
-        calcTotalPrice();
-
         itemToDelete.remove();
         totalQuantity = [];
-
+        totalItem = [];
         calcTotalQte();
+        updateLocalStorage();
+        calcTotalPrice();
       }
       function updateLocalStorage() {
         localStorage.clear();
@@ -329,7 +328,8 @@ valideCommande.addEventListener('click', validateForm);
 let contact = [];
 let products = [];
 
-function validateForm() {
+function validateForm(event) {
+  event.preventDefault();
   if (
     firstNameValided == true &&
     lastNameValided == true &&
@@ -337,9 +337,8 @@ function validateForm() {
     cityValided == true &&
     emailValided == true
   ) {
-    for (i = 0; i < cart.length; i++) {
-      products.push(cart[i].id);
-    }
+    products = cart.map((prod) => prod.id);
+
     contact = {
       firstName: firstName.value,
       lastName: lastName.value,
@@ -352,7 +351,6 @@ function validateForm() {
   }
   send();
   console.log(contact, products);
-  products = [];
 }
 
 ///////////////////////////// envoie Post /////////////////////////////////////
@@ -378,7 +376,7 @@ function send() {
         '/front/html/confirmation.html?orderId=' +
         value.orderId;
       /* lien URL + /front/html/confirmation.html?orderId= + orderId */
-      //localStorage.clear();
+
       return value;
     });
   return;
