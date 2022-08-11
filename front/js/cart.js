@@ -1,5 +1,12 @@
-let cart = JSON.parse(localStorage['productsInCart']);
-let itemInCart = false;
+let cart;
+function getCart() {
+  if (localStorage['productsInCart'] == null) {
+    cart = [];
+  } else {
+    cart = JSON.parse(localStorage['productsInCart']);
+  }
+}
+getCart();
 const sectionCart = document.getElementById('cart__items');
 ////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
@@ -23,10 +30,7 @@ for (i = 0; i < cart.length; i++) {
   let itemId = cart[i].id;
   let itemColor = cart[i].option;
   let itemQuantity = cart[i].quantity;
-  if (cart.length >= 1) {
-    itemInCart = true;
-  }
-  console.log(itemInCart);
+
   ////// constante i pour recuperer l'item pour la function deleteItem ////////////////
   const temp = i;
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
@@ -294,20 +298,19 @@ valideCommande.addEventListener('click', valideCde);
 ////////////////////////////////// validation Form ////////////////////////////
 let contact = [];
 let products = [];
-console.log(showTotalQuantity.textContent);
 function valideCde(e) {
+  e.preventDefault();
   if (
     showTotalQuantity.textContent == 0 ||
     showTotalQuantity.textContent == undefined ||
     showTotalQuantity.textContent == null
   ) {
-    alert('Ancun produit ajouté dans le panier');
-    e.preventDefault();
+    alert("Ancun produit n'a été ajouté dans le panier");
   } else {
     validateForm();
   }
 }
-function validateForm(event) {
+function validateForm() {
   if (
     firstNameValided == true &&
     lastNameValided == true &&
@@ -327,11 +330,9 @@ function validateForm(event) {
 
     alert('Commande validé avec succès !');
   } else {
-    event.preventDefault();
     alert('Remplisser le formulaire et verifier vos produits');
   }
   send();
-  localStorage.clear();
 }
 
 ///////////////////////////// envoie Post /////////////////////////////////////
