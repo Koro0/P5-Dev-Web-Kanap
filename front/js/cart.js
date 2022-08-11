@@ -1,6 +1,5 @@
 let cart = JSON.parse(localStorage['productsInCart']);
-console.log(cart);
-
+let itemInCart = false;
 const sectionCart = document.getElementById('cart__items');
 ////////////////////// affichage du quantité total ////////////////////
 let totalQuantity = [];
@@ -8,7 +7,6 @@ const showTotalQuantity = document.querySelector('#totalQuantity');
 function calcTotalQte() {
   if (cart) {
     cart.forEach((item) => totalQuantity.push(item.quantity));
-    //console.log(totalQuantity);
     showTotalQuantity.textContent = eval(totalQuantity.join('+'));
   } else {
     showTotalQuantity.textContent = 0;
@@ -23,16 +21,16 @@ let total;
 /////////////////////////////////////////////////////////////////////////
 for (i = 0; i < cart.length; i++) {
   let itemId = cart[i].id;
-  //console.log(itemId);
   let itemColor = cart[i].option;
-  //console.log(itemColor);
   let itemQuantity = cart[i].quantity;
-  //console.log(itemQuantity);
+  if (cart.length >= 1) {
+    itemInCart = true;
+  }
+  console.log(itemInCart);
   ////// constante i pour recuperer l'item pour la function deleteItem ////////////////
   const temp = i;
   ////////////////requete fetch selon l'item /////////////////////////////////////////////
   let requete = 'http://localhost:3000/api/products/' + itemId;
-  //console.log(requete);
   fetch(requete)
     .then((response) => {
       return response.json();
@@ -43,11 +41,9 @@ for (i = 0; i < cart.length; i++) {
       const cartItemImgUnder = document.createElement('img');
       cartItemImgUnder.src = data.imageUrl;
       cartItemImgUnder.alt = data.altTxt;
-      //console.log(cartItemImgUnder);
 
       const cartItemImg = document.createElement('div');
       cartItemImg.className = 'cart__item__img';
-      //console.log(cartItemImg);
 
       cartItemImg.appendChild(cartItemImgUnder);
 
@@ -57,19 +53,15 @@ for (i = 0; i < cart.length; i++) {
 
       const cartItemName = document.createElement('h2');
       cartItemName.textContent = data.name;
-      //console.log(cartItemName);
 
       const cartItemColor = document.createElement('p');
       cartItemColor.textContent = itemColor;
-      //console.log(cartItemColor);
 
       const cartItemPrice = document.createElement('p');
       cartItemPrice.textContent = data.price + ' €';
-      //console.log(cartItemPrice);
 
       const cartItemContentDescription = document.createElement('div');
       cartItemContentDescription.className = 'cart__item__content__description';
-      //console.log(cartItemContentDescription);
 
       cartItemContentDescription.appendChild(cartItemName);
       cartItemContentDescription.appendChild(cartItemColor);
@@ -80,7 +72,6 @@ for (i = 0; i < cart.length; i++) {
 
       const cartItemContentSettingsQuantityUnder = document.createElement('p');
       cartItemContentSettingsQuantityUnder.textContent = 'Qté : ';
-      //console.log(cartItemContentSettingsQuantityUnder);
 
       const cartItemContentSettingsQuantityInput =
         document.createElement('input');
@@ -90,7 +81,6 @@ for (i = 0; i < cart.length; i++) {
       cartItemContentSettingsQuantityInput.min = 1;
       cartItemContentSettingsQuantityInput.max = 100;
       cartItemContentSettingsQuantityInput.value = itemQuantity;
-      //console.log(cartItemContentSettingsQuantityInput);
 
       const cartItemContentSettingsQuantity = document.createElement('div');
       cartItemContentSettingsQuantity.className =
@@ -108,7 +98,6 @@ for (i = 0; i < cart.length; i++) {
       const cartItemContentSettingsDeleteUnder = document.createElement('p');
       cartItemContentSettingsDeleteUnder.className = 'deleteItem';
       cartItemContentSettingsDeleteUnder.textContent = 'Supprimer';
-      //console.log(cartItemContentSettingsDeleteUnder);
 
       const cartItemContentSettingsDelete = document.createElement('div');
       cartItemContentSettingsDelete.className =
@@ -121,14 +110,12 @@ for (i = 0; i < cart.length; i++) {
 
       const cartItemContentSettings = document.createElement('div');
       cartItemContentSettings.className = 'cart__item__content__settings';
-      //console.log(cartItemContentSettings);
 
       cartItemContentSettings.appendChild(cartItemContentSettingsQuantity);
       cartItemContentSettings.appendChild(cartItemContentSettingsDelete);
 
       const cartItemContent = document.createElement('div');
       cartItemContent.className = 'cart__item__content';
-      //console.log(cartItemContent);
 
       cartItemContent.appendChild(cartItemContentDescription);
       cartItemContent.appendChild(cartItemContentSettings);
@@ -137,7 +124,6 @@ for (i = 0; i < cart.length; i++) {
       cartItem.className = 'cart__item';
       cartItem.dataset.id = itemId;
       cartItem.dataset.color = itemColor;
-      //console.log(cartItem);
 
       cartItem.appendChild(cartItemImg);
       cartItem.appendChild(cartItemContent);
@@ -181,7 +167,6 @@ for (i = 0; i < cart.length; i++) {
             quantity: cartItemContentSettingsQuantityInput.value,
             option: itemColor,
           });
-          // console.log(cart);
         } else if (cartItemContentSettingsQuantityInput.value <= 0) {
           cart.splice(temp, 1, {
             id: itemId,
@@ -189,7 +174,6 @@ for (i = 0; i < cart.length; i++) {
             option: itemColor,
           });
           cartItemContentSettingsQuantityInput.value = 1;
-          //console.log(cart);
         }
         totalQuantity = [];
         totalItem = [];
@@ -202,7 +186,6 @@ for (i = 0; i < cart.length; i++) {
       function calcTotalPrice() {
         price = itemQuantity * data.price;
         cart.forEach((item) => totalItem.push(item.quantity * data.price));
-        //totalItem.push(price);
         total = totalItem.reduce(
           (previousValue, currentValue) => previousValue + currentValue,
           0
@@ -210,7 +193,6 @@ for (i = 0; i < cart.length; i++) {
         totalPrice.textContent = total;
       }
       calcTotalPrice();
-      //console.log(totalPrice.textContent);
     })
 
     /////////////////// end code /////////////////////////////////////////
@@ -253,68 +235,53 @@ let emailValided = false;
 ////////////////////////// function de verification des inputs saisie ///////////////////////
 function ValidatefirstName() {
   if (firstName.value.match(Regex)) {
-    console.log('saisie Nom correct : ' + firstName.value);
     firstNameValided = true;
     firstNameErrorMsg.textContent = ' ';
   } else {
-    console.log('saisie Nom erroné : ' + firstName.value);
     firstNameErrorMsg.textContent =
       'Saisissez correctement votre Nom (seulement les lettre sont autoriser) ';
     firstNameValided = false;
   }
-  console.log(firstNameValided);
 }
 
 function validateLastname() {
   if (lastName.value.match(Regex)) {
-    console.log('saisie Prenom correct : ' + lastName.value);
     lastNameErrorMsg.textContent = ' ';
     lastNameValided = true;
   } else {
-    console.log('saisie Prenom erroné : ' + lastName.value);
     lastNameErrorMsg.textContent =
       'Saisissez correctement votre Nom (seulement les lettre sont autoriser)';
     lastNameValided = false;
   }
-  console.log(lastNameValided);
 }
 
 function valiadateAdress() {
   if (address.value.match(RegexAdress)) {
-    console.log('saisie Adresse correct : ' + address.value);
     addressErrorMsg.textContent = ' ';
     addressValided = true;
   } else {
-    console.log('saisie Adresse erroné ' + address.value);
     addressErrorMsg.textContent = 'Remplir une adresse correcte';
     addressValided = false;
   }
-  console.log(addressValided);
 }
 
 function validationCity() {
   if (city.value.match(Regex)) {
-    console.log('saisie Ville correct : ' + city.value);
     cityErrorMsg.textContent = ' ';
     cityValided = true;
   } else {
-    console.log('saisie Ville erroné ' + city.value);
     cityErrorMsg.textContent = 'Remplissez vote Ville';
     cityValided = false;
   }
-  console.log(cityValided);
 }
 function valiadateEmail() {
   if (email.value.match(RegexEmail)) {
-    console.log('saisie email correct : ' + email.value);
     emailErrorMsg.textContent = ' ';
     emailValided = true;
   } else {
-    console.log('saisie email erroné ' + email.value);
     emailErrorMsg.textContent = 'un email valide est exiger !';
     emailValided = false;
   }
-  console.log(emailValided);
 }
 firstName.addEventListener('change', ValidatefirstName);
 lastName.addEventListener('change', validateLastname);
@@ -322,14 +289,25 @@ address.addEventListener('change', valiadateAdress);
 city.addEventListener('change', validationCity);
 email.addEventListener('change', valiadateEmail);
 
-valideCommande.addEventListener('click', validateForm);
+valideCommande.addEventListener('click', valideCde);
 
 ////////////////////////////////// validation Form ////////////////////////////
 let contact = [];
 let products = [];
-
+console.log(showTotalQuantity.textContent);
+function valideCde(e) {
+  if (
+    showTotalQuantity.textContent == 0 ||
+    showTotalQuantity.textContent == undefined ||
+    showTotalQuantity.textContent == null
+  ) {
+    alert('Ancun produit ajouté dans le panier');
+    e.preventDefault();
+  } else {
+    validateForm();
+  }
+}
 function validateForm(event) {
-  event.preventDefault();
   if (
     firstNameValided == true &&
     lastNameValided == true &&
@@ -346,11 +324,14 @@ function validateForm(event) {
       city: city.value,
       email: email.value,
     };
+
+    alert('Commande validé avec succès !');
   } else {
-    console.log('error form');
+    event.preventDefault();
+    alert('Remplisser le formulaire et verifier vos produits');
   }
   send();
-  console.log(contact, products);
+  localStorage.clear();
 }
 
 ///////////////////////////// envoie Post /////////////////////////////////////
@@ -365,7 +346,6 @@ function send() {
     body: JSON.stringify({ products, contact }),
   })
     .then(function (res) {
-      console.log(res);
       if (res.ok) {
         return res.json();
       }
@@ -376,7 +356,6 @@ function send() {
         '/front/html/confirmation.html?orderId=' +
         value.orderId;
       /* lien URL + /front/html/confirmation.html?orderId= + orderId */
-
       return value;
     });
   return;
