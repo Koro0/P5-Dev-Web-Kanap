@@ -2,7 +2,6 @@
 // recupere le Id du produit
 let articleUrl = new URL(window.location.href);
 let articleId = articleUrl.searchParams.get('id');
-console.log(articleUrl, articleId);
 let requete = 'http://localhost:3000/api/products/' + articleId;
 
 /*recuperer les balises qui a :  
@@ -24,12 +23,11 @@ fetch(requete)
   })
   .then((data) => {
     // Work with JSON data here
-    console.log(data);
     showItem(data);
   })
   .catch((err) => {
     // Do something for an error here
-    console.log('message erreur ', err);
+    console.error('message erreur ', err);
   });
 ///////Afficher le produit ///////////////////////
 function showItem(data) {
@@ -57,10 +55,8 @@ function addItemInCart() {
   let articleQuantitySelected = articleQuantity.value; //quantité dans l'input
   let articleColorSeleted =
     articleColor.options[articleColor.selectedIndex].value; //la couleur choisie
-  console.log(articleColorSeleted, articleQuantitySelected);
 
   if (articleQuantitySelected <= 0 || articleColorSeleted == 'null') {
-    console.log("l'option ou la quantité non choisie");
     alert('Choisissez la couleur et la quantité');
   } else {
     //si le localStorage posséde deja du contenus
@@ -69,14 +65,13 @@ function addItemInCart() {
       //sinon creer un tableau
     } else {
       cart = [];
-      console.log(cart);
     }
     //passer en boucle dans le tableau panier('cart')
     for (i = 0; i < cart.length; i++) {
       // si cet article est deja present dans le panier et qui a les meme option
       if (cart[i].id == articleId && cart[i].option == articleColorSeleted) {
         cart[i].quantity += parseInt(articleQuantitySelected);
-        console.log(parseInt(articleQuantitySelected), cart[i].quantity);
+
         sameArticle = true;
       }
     }

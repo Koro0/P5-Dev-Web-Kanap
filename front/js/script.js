@@ -22,13 +22,10 @@ function shows(data) {
     //ajout attribut sur <a>
     a.href = 'product.html?id=' + data[i]._id;
 
-    //console.log(a);
-
     let article = document.createElement('article');
     //Variable pour code Image
     let articleImg = document.createElement('img');
     articleImg.src = data[i].imageUrl;
-    //console.log(articleImg);
     article.appendChild(articleImg);
 
     //Variable pour code Nom
